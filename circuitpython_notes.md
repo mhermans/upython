@@ -1,3 +1,10 @@
+# Setup mu-editor
+
+download: https://codewith.mu/en/download
+source ~/lib/virtualenvs/espenv/bin/activate
+pip3 install mu-editor
+sudo adduser mhermans uucp
+mu-editor
 
 
 download ItsyBitsy M0 Express CircuitPython 4.1.2 firmware
