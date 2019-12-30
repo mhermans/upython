@@ -9,8 +9,8 @@ a_in_pir = AnalogIn(board.A1)
 # Light sensor on PIN A2
 a_in_light = AnalogIn(board.A2)
 
-# Neopixel strip on PIN D12
-pixel_pin = board.D12
+# Neopixel strip on PIN D5
+pixel_pin = board.D5
 
 num_pixels = 30
 ORDER = neopixel.GRB
