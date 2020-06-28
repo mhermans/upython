@@ -16,14 +16,6 @@ import adafruit_touchscreen
 
 #DISPLAY_COLOR = 0x006600#000000
 DISPLAY_COLOR = 0x00000
-SWITCH_COLOR = 0x008800
-SWITCH_FILL_COLOR = 0xffffff
-
-# Switch location
-SWITCHX = 260
-SWITCHY = 4
-
-FEED_NAME = "pyportal-switch"
 
 months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
           "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
@@ -84,38 +76,6 @@ def create_text_areas(configs):
         text_areas.append(textarea)
     return text_areas
 
-class Switch(object):
-    def __init__(self, pin, my_pyportal):
-        self.switch = digitalio.DigitalInOut(pin)
-        self.switch.direction = digitalio.Direction.OUTPUT
-        rect = RoundRect(SWITCHX, SWITCHY, 31, 60, 16, outline=SWITCH_COLOR,
-                         fill=SWITCH_FILL_COLOR, stroke=3)
-        my_pyportal.splash.append(rect)
-        self.circle_on = Circle(SWITCHX + 15, SWITCHY + 16, 10, fill=SWITCH_FILL_COLOR)
-        my_pyportal.splash.append(self.circle_on)
-        self.circle_off = Circle(SWITCHX + 15, SWITCHY + 42, 10, fill=DISPLAY_COLOR)
-        my_pyportal.splash.append(self.circle_off)
-
-    # turn switch on or off
-    def enable(self, enable):
-        print("turning switch to ", enable)
-        self.switch.value = enable
-        if enable:
-            self.circle_off.fill = SWITCH_FILL_COLOR
-            self.circle_on.fill = DISPLAY_COLOR
-        else:
-            self.circle_on.fill = SWITCH_FILL_COLOR
-            self.circle_off.fill = DISPLAY_COLOR
-
-    def toggle(self):
-        if self.switch.value:
-            self.enable(False)
-        else:
-            self.enable(True)
-
-    def status(self):
-        return self.switch.value
-
 # you'll need to pass in an io username and key
 TIME_SERVICE = "http://io.adafruit.com/api/v2/%s/integrations/time/strftime?x-aio-key=%s"
 # See https://apidock.com/ruby/DateTime/strftime for full options
@@ -175,28 +135,6 @@ class Clock(object):
             board.DISPLAY.refresh_soon()
             board.DISPLAY.wait_for_frame()
 
-# Define callback methods which are called when events occur
-# pylint: disable=unused-argument, redefined-outer-name
-def connected(client, userdata, flags, rc):
-    # This function will be called when the client is connected
-    # successfully to the broker.
-    onoff_feed = secrets['aio_username'] + '/feeds/' + FEED_NAME
-    print('Connected to Adafruit IO! Listening for topic changes on %s' % onoff_feed)
-    # Subscribe to all changes on the onoff_feed.
-    client.subscribe(onoff_feed)
-
-def disconnected(client, userdata, rc):
-    # This method is called when the client is disconnected
-    print('Disconnected from Adafruit IO!')
-
-def message(client, topic, message):
-    # This method is called when a topic the client is subscribed to
-    # has a new message.
-    print('New message on topic {0}: {1}'.format(topic, message))
-    if message in ("ON","TRUE","1"):
-        switch.enable(True)
-    else:
-        switch.enable(False)
 
 ############################################
 
@@ -233,7 +171,8 @@ if esp.status == adafruit_esp32spi.WL_IDLE_STATUS:
 
 pyportal = PyPortal(esp=esp,
                     external_spi=spi,
-                    default_bg="/elias.bmp")
+                    #default_bg="/elias.bmp",
+                    default_bg=0xFFFFFF)
 
 ampm_font = bitmap_font.load_font("/fonts/RobotoMono-18.bdf")
 ampm_font.load_glyphs(b'ampAMP')
@@ -261,10 +200,6 @@ print("My IP address is", esp.pretty_ip(esp.ip_address))
 wifi = adafruit_esp32spi_wifimanager.ESPSPI_WiFiManager(
     esp, secrets, debug = True)
 
-
-
-switch = Switch(board.D4, pyportal)
-
 second_timer = time.monotonic()
 while True:
     #time.sleep(1)
@@ -274,7 +209,7 @@ while True:
         # touch anywhere on the screen
         print("touch!")
         clock.adjust_backlight(True)
-        switch.toggle()
+        #switch.toggle()
         time.sleep(1)
 
     # poll once per second
