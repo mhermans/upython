@@ -1,0 +1,11 @@
+fancy.CRGB(1,126,213),      # Red
+           fancy.CRGB(181,61,255),      # purple
+           fancy.CRGB(0, 207, 82),
+           fancy.CRGB(0, 207, 82),
+           fancy.CRGB(3, 46, 62),
+           fancy.CRGB(3, 46, 62),
+           fancy.CRGB(0, 207, 82),
+           fancy.CRGB(3, 46, 62),
+           fancy.CRGB(0,223,150),
+           fancy.CRGB(24, 35, 62),
+           fancy.CRGB(70, 174, 115),

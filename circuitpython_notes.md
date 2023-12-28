@@ -7,7 +7,7 @@ sudo adduser mhermans uucp
 mu-editor
 
 
-download ItsyBitsy M0 Express CircuitPython 4.1.2 firmware
+download ItsyBitsy M0 Express CircuitPython firmware
 
 https://circuitpython.org/board/itsybitsy_m0_express/
 https://github.com/adafruit/circuitpython/releases/download/4.1.2/adafruit-circuitpython-itsybitsy_m0_express-en_US-4.1.2.uf2
